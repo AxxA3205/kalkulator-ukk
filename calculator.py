@@ -58,8 +58,14 @@ class Calculator:
         self.create_sqrt_button()
         self.create_square_button()
         self.create_backspace_button()
+        self.create_blank_button()
         
 
+    def create_blank_button(self):
+        button = tk.Label(self.buttons_frame, bg=BLACK, 
+                            borderwidth=0)
+        button.grid(row=0, column=1, sticky=tk.NSEW, columnspan=3)
+        
     def create_display_labels(self):
         total_label = tk.Label(self.display_frame, text=self.total_expression, anchor=tk.E, bg=BLACK,
                                fg=WHITE, padx=24, font=SMALL_FONT_STYLE)
@@ -108,9 +114,9 @@ class Calculator:
 
     #Defining the backspace button
     def create_backspace_button(self):
-        button = tk.Button(self.buttons_frame, text="DEL", bg=LIGHT_GRAY, fg=WHITE, font=DEFAULT_FONT_STYLE, 
+        button = tk.Button(self.buttons_frame, text="\u232b", bg=BLACK, fg=WHITE, font=DEFAULT_FONT_STYLE, 
                             borderwidth=0, command=self.backspace)
-        button.grid(row=0, column=4, sticky=tk.NSEW)
+        button.grid(row=0, column=4, sticky=tk.NSEW, columnspan=4)
 
 
     def clear(self):
