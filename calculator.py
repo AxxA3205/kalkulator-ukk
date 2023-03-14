@@ -11,6 +11,7 @@ LIGHT_BLUE = "#CCEDFF"
 LIGHT_GRAY = "#D4D4D2"
 DARK_GRAY = "#505050"
 BLACK = "#1C1C1C"
+RED = "#D0342C"
 
 
 class Calculator:
@@ -18,7 +19,7 @@ class Calculator:
         self.window = tk.Tk()
         self.window.geometry("375x667")
         self.window.resizable(False,False)
-        self.window.title("Calculator")
+        self.window.title("Calculator AxxA")
 
         self.total_expression = ""
         self.current_expression = ""
@@ -32,7 +33,7 @@ class Calculator:
             1: (4, 1), 2: (4, 2), 3: (4, 3),
             0: (5, 2), '.': (5, 1)
         }
-        self.operations = {"/": "\u00F7", "*": "\u00D7", "-": "-", "+": "+"}
+        self.operations = {"/": "\u00F7", "*": "\u00D7", "-": "-", "+": "+" }
         self.buttons_frame = self.create_buttons_frame()
 
         self.buttons_frame.rowconfigure(0, weight=1)
@@ -51,6 +52,10 @@ class Calculator:
 
         for key in self.operations:
             self.window.bind(key, lambda event, operator=key: self.append_operator(operator))
+            self.window.bind("<BackSpace>", lambda event:self.backspace())
+            self.window.bind("<^>", lambda event:self.square())
+            self.window.bind("<\>", lambda event:self.sqrt())
+            self.window.bind("<c>", lambda event:self.clear())
 
     def create_special_buttons(self):
         self.create_clear_button()
@@ -114,7 +119,7 @@ class Calculator:
 
     #Defining the backspace button
     def create_backspace_button(self):
-        button = tk.Button(self.buttons_frame, text="\u232b", bg=BLACK, fg=WHITE, font=DEFAULT_FONT_STYLE, 
+        button = tk.Button(self.buttons_frame, text="\u232b", bg=BLACK, fg=RED, font=DEFAULT_FONT_STYLE, 
                             borderwidth=0, command=self.backspace)
         button.grid(row=0, column=4, sticky=tk.NSEW, columnspan=4)
 
@@ -152,8 +157,12 @@ class Calculator:
         self.total_expression += self.current_expression
         self.update_total_label()
         try:
-            self.current_expression = str(eval(self.total_expression))
-
+            self.current_expression = eval(self.total_expression)
+            self.current_expression = round(self.current_expression, 10)
+            if float(self.current_expression).is_integer():
+                self.current_expression = int(self.current_expression)
+            
+            self.current_expression = str(self.current_expression)
             self.total_expression = ""
         except Exception as e:
             self.current_expression = "Error"
@@ -179,7 +188,7 @@ class Calculator:
         self.total_label.config(text=expression)
 
     def update_label(self):
-        self.label.config(text=self.current_expression[:11])
+        self.label.config(text=self.current_expression)
 
     def run(self):
         self.window.mainloop()
